@@ -1,7 +1,25 @@
 {
   "name": "cesium-flyer",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "0.0.1",
+  "author": "sren",
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "cesium",
+    "flyer",
+  ],
+  "module": "./dist/cesium-flyer.es.js",
+  "main": "./dist/cesium-flyer.umd.js",
+  "exports": {
+    ".": {
+      "import": "./dist/cesium-flyer.es.js",
+      "require": "./dist/cesium-flyer.umd.js"
+    },
+    "./dist/style.css": {
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
