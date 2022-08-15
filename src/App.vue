@@ -3,14 +3,17 @@
     <div style="position: fixed; z-index: 10; left: 20px; top: 20px">
       <button class="tbt" @click="createLane">新建飞行路线</button>
       <button class="tbt" @click="addCurrentPoint">标记飞行点</button>
+      <button class="tbt" @click="flyData.lane.pop()">删除飞行点</button>
       <br />
-      <select class="tbt" @click="startFly">
-        <option label="fly1" />
-      </select>
       <button class="tbt" @click="startFly">开始飞行</button>
       <button class="tbt" @click="stopFly">停止飞行</button>
     </div>
+
     <div id="mapContainer"></div>
+    <br />
+    <p v-for="i in flyData.lane" :key="i.lon">
+      {{i}}
+    </p>
   </div>
 </template>
 
@@ -28,32 +31,30 @@ const flyData =ref( {
     { lon: 122.53961587278168, lat: 37.268570557477986, hei: 443296.85404971987, heading: 6.28318530717958, pitch: - 1.569915613353213, roll: 0 },
     { lon: 119.68647691182409, lat: 36.118172854992906, hei: 442886.3777825233, heading: 6.28318530717958, pitch: -1.5699544982381348, roll: 0 },
     { lon: 121.22852343928692, lat: 31.5135013722044, hei: 575972.4402006189, heading: 6.283185307179574, pitch: -1.5701701825123062, roll: 0 },
-    { lon: 121.85881251035663, lat: 25.140513857566077, hei: 383671.5622330892, heading: 6.283185307179577, pitch: -1.5706819683557987, roll: 0 },
-    { lon: 120.81502941402901, lat: 21.753550098622394, hei: 382754.2054188958, heading: 6.283185307179577, pitch: -1.570639437071692, roll: 0 },
-    { lon: 116.45708717460909, lat: 20.83051633835972, hei: 868083.0130429118, heading: 6.283185307179577, pitch: -1.5706966815634034, roll: 0 }
   ],
   isFreeView: false
 })
 
 
-const cf  = ref()
+var cf  = undefined
 
 function createLane() {
   flyData.value = { lane: [], isFreeView: false }
 }
 
 function addCurrentPoint() {
-  let pos: FlyPoint = cf.value.getCurrentPos()
+  let pos: FlyPoint = cf.getCurrentPos()
   flyData.value.lane.push(pos)
 }
 
 function startFly() {
-  cf.value.startFly(flyData.value)
+  cf.startFly(flyData.value)
 }
 
 function stopFly() {
-  cf.value.stopFly()
+  cf.stopFly()
 }
+
 
 onMounted(() => {
   Cesium.Ion.defaultAccessToken =
@@ -71,7 +72,7 @@ onMounted(() => {
     animation: false, //是否创建动画小器件，左下角仪表
   });
 
-  cf.value = new CesiumFlyer(viewer, {})
+  cf = new CesiumFlyer(viewer, {})
 
 });
 </script>
